@@ -1,0 +1,52 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'b3a096ac-f4cb-432a-a7e2-a17d9fb2215a'
+  imageRepository: 'cloudnativeweather'
+  containerRegistry: 'shayne.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/cloudnative-weather/Dockerfile'
+  tag: '$(Build.BuildId)'
+  
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+- stage: Deploy
+  displayName: Deploy to AppService
+  jobs: 
+  - job: Deploy
+    steps:
+
+    - task: AzureWebAppContainer@1
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        azureSubscription: 'Azure-shboyer'
+        appName: 'weatherservice'
+        imageName: 'shayne.azurecr.io/weatherappsesrvice'
