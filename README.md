@@ -9,6 +9,8 @@ Cloud Native Show Live Episode #1 with Shayne and Glenn. They talk about Cloud N
 
 All of the links are available at - https://www.theurlist.com/cloud-native-show-live-ep1 
 
+
+* [Free Azure Account](https://aka.ms/cldntvshw/freeazure)
 * [Cloud Native Show on Channel 9](https://aka.ms/cloudnativeshow)
 * [Cloud Native Show on You Tube](https://aka.ms/cloudnativeshow-youtube)
 * [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.0&WT.mc_id=cloudnative-ch9-shboyer)
